@@ -34,9 +34,22 @@ jobs:
           host: ${{ secrets.BLUE_SERVER_IP }}
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: 
+          script: |
             cd ~/Production-AWS-DevOps-Platform/app
             sudo docker stop blue-app || true
             sudo docker rm blue-app || true
             sudo docker build -t blue-app .
             sudo docker run -d --name blue-app -p 80:80 blue-app
+
+      - name: Deploy to Green server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.GREEN_SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/Production-AWS-DevOps-Platform/app
+            sudo docker stop green-app || true
+            sudo docker rm green-app || true
+            sudo docker build -t green-app .
+            sudo docker run -d --name green-app -p 80:80 green-app
