@@ -13,9 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t production-app ./app
-        - name: Test application files
+      - name: Test application files
         run: |
           test -f app/index.html
           test -f app/Dockerfile
+
+      - name: Build Docker image
+        run: docker build -t production-app ./app
+      
