@@ -27,3 +27,16 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t production-app ./app
+
+      - name: Deploy to Blue server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.BLUE_SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: 
+            cd ~/Production-AWS-DevOps-Platform/app
+            sudo docker stop blue-app || true
+            sudo docker rm blue-app || true
+            sudo docker build -t blue-app .
+            sudo docker run -d --name blue-app -p 80:80 blue-app
