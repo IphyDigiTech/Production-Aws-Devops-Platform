@@ -15,3 +15,7 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t production-app ./app
+        - name: Test application files
+        run: |
+          test -f app/index.html
+          test -f app/Dockerfile
